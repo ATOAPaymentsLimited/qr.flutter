@@ -185,8 +185,17 @@ class _QrImageViewState extends State<QrImageView> {
         // if requesting to embed an image then we need to load via a
         // FutureBuilder because the image provider will be async.
         return FutureBuilder<ui.Image>(
-          future: _loadQrImage(context, widget.embeddedImageStyle),
+          future: Future<ui.Image>.delayed(
+            const Duration(milliseconds: 300),
+            () async => _loadQrImage(context, widget.embeddedImageStyle),
+          ),
           builder: (ctx, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
             if (snapshot.error != null) {
               print("snapshot error: ${snapshot.error}");
               if (widget.embeddedImageEmitsError) {
