@@ -33,6 +33,7 @@ class QrImageView extends StatefulWidget {
     this.gapless = true,
     this.embeddedImage,
     this.embeddedImageStyle,
+    this.showLoader = true,
     this.semanticsLabel = 'qr code',
     this.eyeStyle = const QrEyeStyle(
       eyeShape: QrEyeShape.square,
@@ -65,6 +66,7 @@ class QrImageView extends StatefulWidget {
     this.embeddedImage,
     this.embeddedImageStyle,
     this.semanticsLabel = 'qr code',
+    this.showLoader = true,
     this.eyeStyle = const QrEyeStyle(
       eyeShape: QrEyeShape.square,
       color: Colors.black,
@@ -145,6 +147,7 @@ class QrImageView extends StatefulWidget {
   /// Styling option for QR data module.
   final QrDataModuleStyle dataModuleStyle;
 
+  final bool showLoader;
   @override
   _QrImageViewState createState() => _QrImageViewState();
 }
@@ -190,7 +193,8 @@ class _QrImageViewState extends State<QrImageView> {
             () async => _loadQrImage(context, widget.embeddedImageStyle),
           ),
           builder: (ctx, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
+            if (snapshot.connectionState == ConnectionState.waiting &&
+                widget.showLoader) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
